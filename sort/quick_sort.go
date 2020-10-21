@@ -1,23 +1,36 @@
 package algorithms
 
+import (
+	"math/rand"
+)
+
 func QuickSort(set ElemSet) {
 	quickSort(set, 0, set.Len()-1)
 }
 
-func quickSort(set ElemSet, start, end int) {
-	if start >= end {
+func quickSort(set ElemSet, left, right int) {
+	if left >= right {
 		return
 	}
 
-	//sep := partition(start, end)
-	pos := swap(set, start, end)
-	// [start,pos]
-	quickSort(set, start, pos-1)
+	start, end := left, right
+	pivot := left + rand.Intn(right-left+1)
+	set.Swap(pivot, right)
 
-	// [pos+1,end]
-	quickSort(set, pos+1, end)
+	for i := left; i < right; i++ {
+		if !set.Less(i, right) { // i < right
+			set.Swap(i, left)
+			left++
+		}
+	}
+
+	set.Swap(left, right)
+
+	quickSort(set, start, left-1)
+	quickSort(set, left+1, end)
 }
 
+/*
 func partition(start, end int) int {
 	return start
 }
@@ -50,12 +63,12 @@ func swap(set ElemSet, left, right int) int {
 
 		set.Swap(left, sep)
 		sep = left
-	*/
+*/
 
-	//pivot := reflect.ValueOf(set).Index(sep)
-	//fmt.Println("pivot:", sep, "--->", pivot)
-	//fmt.Println("before:", set)
-	/*
+//pivot := reflect.ValueOf(set).Index(sep)
+//fmt.Println("pivot:", sep, "--->", pivot)
+//fmt.Println("before:", set)
+/*
 		for left < right {
 			for left < right && set.Less(right, sep) {
 				//fmt.Println(reflect.ValueOf(set).Index(right), ">=", reflect.ValueOf(set).Index(sep), "right右移", right-1, "<---", right)
@@ -111,6 +124,6 @@ func swap(set ElemSet, left, right int) int {
 		//fmt.Println("swap after", set)
 		//fmt.Println("sep:", sep)
 		return sep
-	*/
 	return sep
 }
+*/
